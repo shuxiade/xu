@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nov.entity.User;
-import com.nov.service.UserService;
+import com.nov.service.impl.UserService;
 
 @RestController
 public class HelloController {

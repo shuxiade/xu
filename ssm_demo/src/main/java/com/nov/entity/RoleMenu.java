@@ -4,6 +4,7 @@ public class RoleMenu {
 
 	private String roleId;
 	private String menuId;
+	
 	public String getRoleId() {
 		return roleId;
 	}

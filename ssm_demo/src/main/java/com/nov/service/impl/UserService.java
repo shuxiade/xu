@@ -1,4 +1,4 @@
-package com.nov.service;
+package com.nov.service.impl;
 
 import java.util.List;
 
@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.nov.dao.UserDao;
 import com.nov.entity.User;
+import com.nov.service.IUserService;
 
 @Service("userService")
 public class UserService implements IUserService {

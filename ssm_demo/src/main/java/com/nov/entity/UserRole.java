@@ -4,6 +4,7 @@ public class UserRole {
 
 	private String userId;
 	private String roleId;
+	
 	public String getUserId() {
 		return userId;
 	}
