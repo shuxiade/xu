@@ -33,4 +33,15 @@
 			value="classpath*:mapper/*.xml"></property>
 	</bean>
 
+	<!-- 缓存管理器 -->
+	<bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+		<property name="cacheManagerConfigFile" value="classpath:shiroCache.xml"></property>
+	</bean>
+	<!-- 凭证匹配器 -->
+	<!-- <bean id="creden" -->
+	<bean id="realm" class="com.nov.auth.realm.authrealm">
+		
+	</bean>
+	
+
 </beans>
