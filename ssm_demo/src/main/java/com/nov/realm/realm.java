@@ -15,11 +15,12 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.nov.entity.Menu;
 import com.nov.entity.Role;
 import com.nov.entity.User;
+import com.nov.service.IMenuService;
 import com.nov.service.IRoleService;
 import com.nov.service.IUserService;
-import com.nov.service.impl.UserService;
 
 public class realm extends AuthorizingRealm{
 
@@ -28,13 +29,16 @@ public class realm extends AuthorizingRealm{
 	
 	@Autowired
 	private IUserService userService;
+	
+	@Autowired
+	private IMenuService menuService;
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 		SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
 		User user = (User)principals.getPrimaryPrincipal();
 		List<Role> roles = roleService.getRole(user.getUserId());
 		for(Role role : roles) {
-			
+			List<Menu> menus = menuService.getMenu(role.getRoleId());
 		}
 		return null;
 	}

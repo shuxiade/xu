@@ -6,5 +6,5 @@ import com.nov.entity.Menu;
 
 public interface IMenuService {
 
-	public List<Menu> getMenu(int roleId);
+	public List<Menu> getMenu(String roleId);
 }
