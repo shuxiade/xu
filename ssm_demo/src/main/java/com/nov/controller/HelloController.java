@@ -18,8 +18,6 @@ public class HelloController {
 	@RequestMapping("/hello/{id}")
 	public List<User> test(@PathVariable int id) {
 		
-//		return userService.findById(id);
-//		return "hello"+id;
 		return userService.findAll();
 	}
 }

@@ -34,14 +34,33 @@
 	</bean>
 
 	<!-- 缓存管理器 -->
-	<bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+<!-- 	<bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
 		<property name="cacheManagerConfigFile" value="classpath:shiroCache.xml"></property>
+	</bean> -->
+	
+	<!-- realm数据源 -->
+	<bean id="realm" class="com.nov.realm.realm">
 	</bean>
-	<!-- 凭证匹配器 -->
-	<!-- <bean id="creden" -->
-	<bean id="realm" class="com.nov.auth.realm.authrealm">
-		
+	<!-- 安全管理器 -->
+	<bean id="securityManager" class="org.apache.shiro.mgt.DefaultSecurityManager">
+		<property name="realms">
+			<list><ref bean="userRealm"></ref></list>
+		</property>
+		<!-- <property name="sessionManager" ></property> -->
+		<property name="cacheManager" ref="cacheManager"></property>
+	</bean>
+
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<property name="securityManager" ref="securityManager"></property>
+		<property name="loginUrl" value="/login"></property>
+		<property name="unauthorizedUrl" value="/unauthrorized"></property>
+		<property name="filterChainDefinitions">
+			<value>
+				/login=anon
+				/**=authc
+			</value>
+		</property>
 	</bean>
 	
-
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
 </beans>

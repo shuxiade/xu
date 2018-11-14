@@ -14,6 +14,7 @@ public class UserService implements IUserService {
 
 	@Autowired
 	UserDao userDao;
+	
 	@Override
 	public User findById(int userId) {
 		
@@ -23,7 +24,9 @@ public class UserService implements IUserService {
 	public List<User> findAll() {
 		return userDao.findAll();
 	}
+	@Override
+	public User findByUsername(String username) {
+		return userDao.finByUsername();
+	}
 	
-	
-
 }

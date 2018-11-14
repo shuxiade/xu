@@ -12,4 +12,6 @@ public interface UserDao {
 	public User findById(int userId);
 		
 	public List<User> findAll();
+	
+	public User finByUsername();
 }

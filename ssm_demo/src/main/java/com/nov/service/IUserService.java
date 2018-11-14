@@ -8,4 +8,5 @@ public interface IUserService {
 	
 	public User findById(int userId);
 	public List<User> findAll();
+	public User findByUsername(String username);
 }
