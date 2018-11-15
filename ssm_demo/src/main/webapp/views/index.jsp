@@ -10,7 +10,7 @@
 <body>
 
 	index
-	
+	${sessionScope.user }
 	
 </body>
 </html>

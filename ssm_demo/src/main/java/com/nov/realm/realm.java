@@ -2,6 +2,8 @@ package com.nov.realm;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -37,7 +39,6 @@ public class realm extends AuthorizingRealm{
 	@Autowired
 	private IMenuService menuService;
 	
-	private PasswordHelper passwordHelper;
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 		SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
@@ -61,7 +62,6 @@ public class realm extends AuthorizingRealm{
 		if(user==null){
 			throw new UnknownAccountException("用户名/密码错误");
 		}
-//		String password = String.valueOf(token.getPassword());
 		SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(
 				username,user.getPassword(),ByteSource.Util.bytes(user.getSalt()),getName());
 		Session session = SecurityUtils.getSubject().getSession();
