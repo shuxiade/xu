@@ -1,5 +1,6 @@
 package com.nov.Utils;
 
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.util.ByteSource;
 
@@ -19,8 +20,9 @@ public class PasswordHelper {
 		User user = new User();
 		user.setUsername("admin");
 		user.setPassword("111");
+		user.randomSalt();
 		encryptPassword(user);
-		System.out.println(user);
+		System.out.println(user.getPassword());
 		System.out.println(ByteSource.Util.bytes(user.getSalt()));
 	}
 }

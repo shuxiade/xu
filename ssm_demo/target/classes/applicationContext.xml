@@ -39,14 +39,14 @@
 	</bean> -->
 	
 	<!-- 密码凭证器 -->
-	<!-- <bean id="hashedCredentialsMatcher" class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+	<bean id="hashedCredentialsMatcher" class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
 		<property name="hashAlgorithmName" value="MD5"></property>
 		<property name="hashIterations" value="2"></property>
-	</bean> -->
+	</bean>
 	
 	<!-- realm数据源 -->
 	<bean id="realm" class="com.nov.realm.realm">
-		<!-- <property name="credentialsMatcher" ref="hashedCredentialsMatcher"></property> -->
+		<property name="credentialsMatcher" ref="hashedCredentialsMatcher"></property>
 	</bean>
 	<!-- 安全管理器 -->
 	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">

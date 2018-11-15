@@ -58,13 +58,12 @@ public class realm extends AuthorizingRealm{
 		UsernamePasswordToken token = (UsernamePasswordToken)authToken;
 		String username = (String)token.getPrincipal();
 		User user = userService.findByUsername(username);
-//		if(user==null || !user.getPassword().equals(password)){
 		if(user==null){
 			throw new UnknownAccountException("用户名/密码错误");
 		}
-//		SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(
-//				username,user.getPassword(), ByteSource.Util.bytes(user.getSalt()),getName());
-		SimpleAuthenticationInfo simpleAuthenticationInfo =new SimpleAuthenticationInfo();
+//		String password = String.valueOf(token.getPassword());
+		SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(
+				username,user.getPassword(),ByteSource.Util.bytes(user.getSalt()),getName());
 		Session session = SecurityUtils.getSubject().getSession();
 		session.setAttribute("user", user);
 		return simpleAuthenticationInfo;
