@@ -66,12 +66,9 @@ public class User {
 	}
 
 	public String getSalt() {
-		return salt;
+		return this.username+this.password;
 	}
 
-	public void setSalt(String salt) {
-		this.salt = salt;
-	}
 
 	public String getDeleteFlag() {
 		return deleteFlag;

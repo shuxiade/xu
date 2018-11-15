@@ -31,4 +31,8 @@
 	<select id="findAll" resultMap="User">
 		SELECT * FROM sys_user
 	</select>
+	
+	<select id="findByUsername" resultMap="User">
+		SELECT * FROM sys_user WHERE username=#{username}
+	</select>
 </mapper>

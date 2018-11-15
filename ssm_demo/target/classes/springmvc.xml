@@ -12,7 +12,7 @@
 		
 	<context:component-scan base-package="com.nov.controller"></context:component-scan>
 	<bean id="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="prefix" value="/WEB-INF/views/"></property>
+		<property name="prefix" value="/views/"></property>
 		<property name="suffix" value=".jsp"></property>
 	</bean>
 	

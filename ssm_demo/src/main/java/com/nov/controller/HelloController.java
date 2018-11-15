@@ -20,4 +20,9 @@ public class HelloController {
 		
 		return userService.findAll();
 	}
+	
+	@RequestMapping("/test")
+	public String test1() {
+		return "test";
+	}
 }

@@ -38,16 +38,19 @@
 		<property name="cacheManagerConfigFile" value="classpath:shiroCache.xml"></property>
 	</bean> -->
 	
+	<!-- 密码凭证器 -->
+	<!-- <bean id="hashedCredentialsMatcher" class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+		<property name="hashAlgorithmName" value="MD5"></property>
+		<property name="hashIterations" value="2"></property>
+	</bean> -->
+	
 	<!-- realm数据源 -->
 	<bean id="realm" class="com.nov.realm.realm">
+		<!-- <property name="credentialsMatcher" ref="hashedCredentialsMatcher"></property> -->
 	</bean>
 	<!-- 安全管理器 -->
-	<bean id="securityManager" class="org.apache.shiro.mgt.DefaultSecurityManager">
-		<property name="realms">
-			<list><ref bean="userRealm"></ref></list>
-		</property>
-		<!-- <property name="sessionManager" ></property> -->
-		<property name="cacheManager" ref="cacheManager"></property>
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="realms" ref="realm"></property>
 	</bean>
 
 	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
@@ -57,6 +60,7 @@
 		<property name="filterChainDefinitions">
 			<value>
 				/login=anon
+				/validate=anon
 				/**=authc
 			</value>
 		</property>

@@ -17,7 +17,7 @@ public class LoginController {
 
 	@GetMapping("/login")
 	public String login() {
-		return "login";
+		return "404";
 	}
 	
 	@RequestMapping(value="/validate",method=RequestMethod.POST)
