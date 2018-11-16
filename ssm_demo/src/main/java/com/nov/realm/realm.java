@@ -1,5 +1,7 @@
 package com.nov.realm;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -43,16 +45,16 @@ public class realm extends AuthorizingRealm{
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 		SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
-		User user = (User)principals.getPrimaryPrincipal();
+		String username = (String)principals.getPrimaryPrincipal();
+		User user = userService.findByUsername(username);
 		List<Role> roles = roleService.getRole(user.getUserId());
 		for(Role role : roles) {
 			List<Menu> menus = menuService.getMenu(role.getRoleId());
 			simpleAuthorizationInfo.addRole(role.getRoleName());
 			for(Menu menu : menus) {
-				simpleAuthorizationInfo.addStringPermission(menu.getUrl());
+				simpleAuthorizationInfo.addStringPermission(menu.getPerms());
 			}
 		}
-		Session session = SecurityUtils.getSubject().getSession();
 		return simpleAuthorizationInfo;
 	}
 

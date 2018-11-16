@@ -2,10 +2,13 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
 
 
+	<aop:config proxy-target-class="true"></aop:config>
 	<context:component-scan
 		base-package="com.nov.service"></context:component-scan>
 	<context:component-scan
@@ -53,17 +56,28 @@
 		<property name="realms" ref="realm"></property>
 	</bean>
 
+	<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+		<property name="securityManager" ref="securityManager"></property>
+	</bean>
 	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
 		<property name="securityManager" ref="securityManager"></property>
 		<property name="loginUrl" value="/login"></property>
-		<property name="unauthorizedUrl" value="/unauthrorized"></property>
+		<property name="unauthorizedUrl" value="/unauthorized"></property>
 		<property name="filterChainDefinitions">
 			<value>
 				/login=anon
 				/validate=anon
+				/admin/**=perms[user:*]
+				/user/**=perms[role:*]
 				/**=authc
+				
 			</value>
 		</property>
+	<!-- 	<property name="filters">
+			<map>
+				<entry key="perms" value=""></entry>
+			</map>
+		</property> -->
 	</bean>
 	
 	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>

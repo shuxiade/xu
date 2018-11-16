@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,9 +41,9 @@ public class LoginController {
 		}
 	}
 	
-	@RequestMapping(value="")
-	public String unthorization() {
-		return "indexs";
+	@RequestMapping(value="unauthorized")
+	public String unauthorized() {
+		return "unauthorized";
 	}
 	
 }
