@@ -1,7 +1,5 @@
 package com.nov.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,32 +11,45 @@ import com.nov.service.impl.UserService;
 
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/user")
 public class UserController {
 	
 	@Autowired
 	private UserService userService;
 	
-	@RequestMapping("/select")
-	public List<User> select(){
-		List<User> users = userService.findAll();
-		return users;
+	@RequestMapping("select")
+	public String select(){
+		return "";
 	}
+	
+	@RequestMapping("toUpdate/{userId}")
+	public String toUpdate() {
+		return "";
+	}
+	
+	@PostMapping("udpate/{userId}")
+	public String update(User user) {
+		
+		return "";
+	}
+	
+	@PostMapping("toAdd")
+	public String toAdd() {
+		
+		return "indexs";
+	}
+	
 	@PostMapping("add")
 	public String add() {
 		
 		return "indexs";
 	}
+	
 
-	@PostMapping("delete")
-	public String delete(@PathVariable int id) {
+	@PostMapping("delete/{userId}")
+	public String delete(@PathVariable int userId) {
 		
 		return "";
 	}
 	
-	@PostMapping("udpate")
-	public String update(User user) {
-	
-		return "";
-	}
 }

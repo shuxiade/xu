@@ -19,4 +19,10 @@ public class RoleService implements IRoleService {
 		
 		return roleDao.getRole(userId);
 	}
+
+	@Override
+	public List<Role> findAll() {
+		
+		return roleDao.findAll();
+	}
 }
