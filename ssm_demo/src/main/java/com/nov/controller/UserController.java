@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/admin")
-@RequiresRoles("admin")
 public class UserController {
 	
 	@RequestMapping("add")
+	@RequiresRoles("admin")
 	public String addUser() {
 		
 		return "indexs";

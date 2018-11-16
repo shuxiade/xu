@@ -8,14 +8,20 @@
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
 
 
+	<!-- 代理开启注解 -->
 	<aop:config proxy-target-class="true"></aop:config>
+	
+	<!-- Spring扫描器 -->
 	<context:component-scan
 		base-package="com.nov.service"></context:component-scan>
 	<context:component-scan
 		base-package="com.nov.dao"></context:component-scan>
 
+	<!-- 加载配置wenjian -->
 	<context:property-placeholder
 		location="classpath:db.properties" />
+		
+	<!-- 数据源 -->
 	<bean id="dataSource"
 		class="com.mchange.v2.c3p0.ComboPooledDataSource">
 		<property name="driverClass" value="${jdbc.driverClass}"></property>
@@ -24,9 +30,12 @@
 		<property name="password" value="${jdbc.password}"></property>
 	</bean>
 
+	<!-- Mybatis扫描器，用来扫描dao接口 -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="basePackage" value="com.nov.dao"></property>
 	</bean>
+	
+	<!-- Mybatis SqlSessionFactoryBean实例(用来调用mapper) -->
 	<bean id="sqlSessionFactory"
 		class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="configLocation"
@@ -47,6 +56,22 @@
 		<property name="hashIterations" value="2"></property>
 	</bean>
 	
+	<!-- RememberMe -->
+<!-- 	<bean id="sessionIdCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+		<constructor-arg value="sid"></constructor-arg>
+		<property name="httpOnly" value="true"></property>
+		<property name="maxAge" value="-1"></property>
+	</bean>
+	<bean id="rememberMeCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+		<constructor-arg value="rememberMe"></constructor-arg>
+		<property name="httpOnly" value="true"></property>
+		<property name="maxAge" value="2592000"></property>一个月
+	</bean>
+	<bean id="rememberMeManager" class="org.apache.shiro.web.mgt.CookieRememberMeManager">
+		<property name="cipherKey" value="#{Base64.decode('2AvVhdsgUs0FSA3SDFAdag==')}"></property>
+		<property name="cookie" ref="rememberMeCookie"></property>
+	</bean> -->
+	
 	<!-- realm数据源 -->
 	<bean id="realm" class="com.nov.realm.realm">
 		<property name="credentialsMatcher" ref="hashedCredentialsMatcher"></property>
@@ -54,8 +79,10 @@
 	<!-- 安全管理器 -->
 	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
 		<property name="realms" ref="realm"></property>
+		<!-- <property name="rememberMeManager" ref="rememberMeManager"></property> -->
 	</bean>
 
+	<!-- 开启shiro注解 -->
 	<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
 		<property name="securityManager" ref="securityManager"></property>
 	</bean>
@@ -67,8 +94,6 @@
 			<value>
 				/login=anon
 				/validate=anon
-				<!-- /admin/**=perms["user:*"] -->
-				<!-- /user/**=perms[role:*] -->
 				/**=authc
 				
 			</value>
