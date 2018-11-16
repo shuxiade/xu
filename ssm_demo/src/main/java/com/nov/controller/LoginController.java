@@ -40,4 +40,9 @@ public class LoginController {
 		}
 	}
 	
+	@RequestMapping(value="")
+	public String unthorization() {
+		return "indexs";
+	}
+	
 }

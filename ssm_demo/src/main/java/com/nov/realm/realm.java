@@ -17,6 +17,7 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
+import org.apache.shiro.web.session.HttpServletSession;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.nov.Utils.PasswordHelper;
@@ -51,6 +52,7 @@ public class realm extends AuthorizingRealm{
 				simpleAuthorizationInfo.addStringPermission(menu.getUrl());
 			}
 		}
+		Session session = SecurityUtils.getSubject().getSession();
 		return simpleAuthorizationInfo;
 	}
 
