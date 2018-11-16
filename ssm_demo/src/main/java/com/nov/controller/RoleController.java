@@ -20,20 +20,20 @@ public class RoleController {
 	
 	@RequestMapping("update/{roleId}")
 	public String update() {
-		return "";
-	}
-	
-	@RequestMapping("toUpdate/{roleId}")
-	public String toUpdate() {
-		return "";
-	}
-	
-	@RequestMapping("add")
-	public String add() {
-		return "";
-	}
-	
-	@RequestMapping("delete/{roleId}")
+		return "";                                                                    
+	}                                                                                 
+	                                                                                  
+	@RequestMapping("toUpdate/{roleId}")                                              
+	public String toUpdate() {                                                        
+		return "";                                                                    
+	}                                                                                 
+	                                                                                  
+	@RequestMapping("add")                                                            
+	public String add() {                                                             
+		return "";                                                                    
+	}                                                                                 
+	                                                                                  
+	@RequestMapping("delete/{roleId}")                                                
 	public void delete() {
 		
 	}

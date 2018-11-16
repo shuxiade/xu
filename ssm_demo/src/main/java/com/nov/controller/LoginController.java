@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.github.pagehelper.Page;
+
 @Controller
 public class LoginController {
 
@@ -39,6 +41,7 @@ public class LoginController {
 			request.setAttribute("error", error);
 			return "login";
 		}
+		
 	}
 	
 	@RequestMapping(value="unauthorized")
