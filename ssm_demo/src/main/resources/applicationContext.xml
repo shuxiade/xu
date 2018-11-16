@@ -67,8 +67,8 @@
 			<value>
 				/login=anon
 				/validate=anon
-				/admin/**=perms[user:*]
-				/user/**=perms[role:*]
+				<!-- /admin/**=perms["user:*"] -->
+				<!-- /user/**=perms[role:*] -->
 				/**=authc
 				
 			</value>
