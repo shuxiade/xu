@@ -16,6 +16,8 @@ public class MenuService implements IMenuService {
 	private MenuDao menuDao;
 	
 	public List<Menu> getMenu(String roleId){
+		
+		
 		return menuDao.getMenu(roleId);
 	}
 
