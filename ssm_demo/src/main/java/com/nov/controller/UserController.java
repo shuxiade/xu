@@ -57,7 +57,5 @@ public class UserController {
 	public String get(UserVo userVo) {
 		System.out.println(userVo.getUser().getPassword());
 		return userVo.getUser().toString();
-//		System.out.println(user.getPassword());
-//		return user.getPassword();
 	}
 }
