@@ -62,10 +62,10 @@
 		4：如果appender中的filter定义的levelMin > levelMax ，则打印不出日志信息
 		 -->
 	<!--指定logger的设置，additivity指示是否遵循缺省的继承机制 -->
-	<logger name="org.springframework" additivity="false">
+	<!-- <logger name="org.springframework" additivity="false">
 		<level value="DEBUG" />
 		<appender-ref ref="console" />
-	</logger>
+	</logger> -->
 	<!-- <logger name="org.mybatis" additivity="false">
 		<level value="DEBUG" />
 		<appender-ref ref="console" />

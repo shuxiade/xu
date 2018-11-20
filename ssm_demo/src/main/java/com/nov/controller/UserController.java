@@ -1,5 +1,7 @@
 package com.nov.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +16,8 @@ import com.nov.vo.UserVo;
 @RestController
 @RequestMapping("/user")
 public class UserController {
+	
+	private Logger logger = LoggerFactory.getLogger(UserController.class);
 	
 	@Autowired
 	private UserService userService;
@@ -55,6 +59,7 @@ public class UserController {
 	
 	@PostMapping("/get")
 	public String get(UserVo userVo) {
+		logger.debug("获取userVo对象："+userVo.toString());
 		System.out.println(userVo.getUser().getPassword());
 		return userVo.getUser().toString();
 	}
