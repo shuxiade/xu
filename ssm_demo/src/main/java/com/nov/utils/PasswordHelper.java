@@ -1,4 +1,4 @@
-package com.nov.Utils;
+package com.nov.utils;
 
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.util.ByteSource;

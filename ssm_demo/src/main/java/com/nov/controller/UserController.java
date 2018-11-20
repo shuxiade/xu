@@ -1,16 +1,17 @@
 package com.nov.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.nov.entity.User;
 import com.nov.service.impl.UserService;
+import com.nov.vo.UserVo;
 
 
-@Controller
+@RestController
 @RequestMapping("/user")
 public class UserController {
 	
@@ -52,4 +53,9 @@ public class UserController {
 		return "";
 	}
 	
+	@PostMapping("/get")
+	public String get(UserVo entity) {
+		
+		return entity.toString();
+	}
 }
