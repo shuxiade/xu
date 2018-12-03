@@ -1,19 +1,15 @@
 package com.nov.controller;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.support.RequestContext;
 
 @Controller
+@RequestMapping(value = "test")
 public class TestController {
 	
-	@RequestMapping("/")
+	@RequestMapping("/practice")
 	public String test() {
-//		RequestContext ctx = RequestContext.getCurrentContext();
-//		RequestDispatcher dispatcher = ctx.getrequest.getRequestDispatcher();
-		return "";
+		System.out.println("测试---------------------");
+		return "practice";
 	}
 }
