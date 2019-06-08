@@ -10,7 +10,7 @@
 
 	<!-- 代理开启注解 -->
 	<aop:config proxy-target-class="true"></aop:config>
-	
+
 	<!-- Spring扫描器 -->
 	<context:component-scan
 		base-package="com.nov.service"></context:component-scan>
@@ -20,7 +20,7 @@
 	<!-- 加载配置wenjian -->
 	<context:property-placeholder
 		location="classpath:db.properties" />
-		
+
 	<!-- 数据源 -->
 	<bean id="dataSource"
 		class="com.mchange.v2.c3p0.ComboPooledDataSource">
@@ -34,7 +34,7 @@
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="basePackage" value="com.nov.dao"></property>
 	</bean>
-	
+
 	<!-- Mybatis SqlSessionFactoryBean实例(用来调用mapper) -->
 	<bean id="sqlSessionFactory"
 		class="org.mybatis.spring.SqlSessionFactoryBean">
@@ -46,47 +46,47 @@
 	</bean>
 
 	<!-- 缓存管理器 -->
-<!-- 	<bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
-		<property name="cacheManagerConfigFile" value="classpath:shiroCache.xml"></property>
-	</bean> -->
-	
+	<!-- <bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager"> 
+		<property name="cacheManagerConfigFile" value="classpath:shiroCache.xml"></property> 
+		</bean> -->
+
 	<!-- 密码凭证器 -->
-	<bean id="hashedCredentialsMatcher" class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+	<bean id="hashedCredentialsMatcher"
+		class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
 		<property name="hashAlgorithmName" value="MD5"></property>
 		<property name="hashIterations" value="2"></property>
 	</bean>
-	
+
 	<!-- RememberMe -->
-<!-- 	<bean id="sessionIdCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
-		<constructor-arg value="sid"></constructor-arg>
-		<property name="httpOnly" value="true"></property>
-		<property name="maxAge" value="-1"></property>
-	</bean>
-	<bean id="rememberMeCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
-		<constructor-arg value="rememberMe"></constructor-arg>
-		<property name="httpOnly" value="true"></property>
-		<property name="maxAge" value="2592000"></property>一个月
-	</bean>
-	<bean id="rememberMeManager" class="org.apache.shiro.web.mgt.CookieRememberMeManager">
-		<property name="cipherKey" value="#{Base64.decode('2AvVhdsgUs0FSA3SDFAdag==')}"></property>
-		<property name="cookie" ref="rememberMeCookie"></property>
-	</bean> -->
-	
+	<!-- <bean id="sessionIdCookie" class="org.apache.shiro.web.servlet.SimpleCookie"> 
+		<constructor-arg value="sid"></constructor-arg> <property name="httpOnly" 
+		value="true"></property> <property name="maxAge" value="-1"></property> </bean> 
+		<bean id="rememberMeCookie" class="org.apache.shiro.web.servlet.SimpleCookie"> 
+		<constructor-arg value="rememberMe"></constructor-arg> <property name="httpOnly" 
+		value="true"></property> <property name="maxAge" value="2592000"></property>一个月 
+		</bean> <bean id="rememberMeManager" class="org.apache.shiro.web.mgt.CookieRememberMeManager"> 
+		<property name="cipherKey" value="#{Base64.decode('2AvVhdsgUs0FSA3SDFAdag==')}"></property> 
+		<property name="cookie" ref="rememberMeCookie"></property> </bean> -->
+
 	<!-- realm数据源 -->
 	<bean id="realm" class="com.nov.realm.realm">
-		<property name="credentialsMatcher" ref="hashedCredentialsMatcher"></property>
+		<property name="credentialsMatcher"
+			ref="hashedCredentialsMatcher"></property>
 	</bean>
 	<!-- 安全管理器 -->
-	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+	<bean id="securityManager"
+		class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
 		<property name="realms" ref="realm"></property>
 		<!-- <property name="rememberMeManager" ref="rememberMeManager"></property> -->
 	</bean>
 
 	<!-- 开启shiro注解 -->
-	<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+	<bean
+		class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
 		<property name="securityManager" ref="securityManager"></property>
 	</bean>
-	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+	<bean id="shiroFilter"
+		class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
 		<property name="securityManager" ref="securityManager"></property>
 		<property name="loginUrl" value="/login"></property>
 		<property name="unauthorizedUrl" value="/unauthorized"></property>
@@ -95,15 +95,56 @@
 				/login=anon
 				/validate=anon
 				/**=authc
-				
+
 			</value>
 		</property>
-	<!-- 	<property name="filters">
-			<map>
-				<entry key="perms" value=""></entry>
-			</map>
-		</property> -->
+		<!-- <property name="filters"> <map> <entry key="perms" value=""></entry> 
+			</map> </property> -->
+	</bean>
+
+	<bean id="lifecycleBeanPostProcessor"
+		class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
+
+	<!-- 集成Quartz   start-->
+	<bean id="jobBean" class="com.nov.controller.QuartzController" />
+	
+	<bean id="SwJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="jobBean" />
+		<property name="targetMethod" value="sw" />
+	</bean>
+
+	<bean id="SnJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="jobBean" />
+		<property name="targetMethod" value="sn" />
 	</bean>
 	
-	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+	<bean id="swTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="SwJob" />
+		<!-- cron表达式 -->
+		<property name="cronExpression" value="0 40 10 * * ?" />
+	</bean>
+	<bean id="snTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="SnJob" />
+		<!-- cron表达式 -->
+		<property name="cronExpression" value="0 40 10 * * ?" />
+	</bean>
+
+	<!-- 总管理类如果将lazy-init='false'那么容器启动就会执行调度程序 作业调度器 SchedulerFactoryBean 管理和配置触发器 -->
+	<bean id="startQuertz"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean"
+		lazy-init="false">
+		<property name="triggers">
+			<list>
+				<!--作业调度器,list下可加入其他的调度器 -->
+				<ref bean="swTrigger" />
+				<ref bean="snTrigger" />
+			</list>
+		</property>
+	</bean>
+	<!-- 集成Quartz end-->
+
 </beans>
