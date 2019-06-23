@@ -108,43 +108,43 @@
 	<!-- 集成Quartz   start-->
 	<bean id="jobBean" class="com.nov.controller.QuartzController" />
 	
-	<bean id="SwJob"
+	<bean id="quartz01"
 		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject" ref="jobBean" />
-		<property name="targetMethod" value="sw" />
+		<property name="targetMethod" value="quartz01" />
 	</bean>
 
-	<bean id="SnJob"
+	<bean id="quartz02"
 		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject" ref="jobBean" />
-		<property name="targetMethod" value="sn" />
+		<property name="targetMethod" value="quartz02" />
 	</bean>
 	
-	<bean id="swTrigger"
+	<bean id="Trigger01"
 		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-		<property name="jobDetail" ref="SwJob" />
+		<property name="jobDetail" ref="quartz01" />
 		<!-- cron表达式 -->
 		<property name="cronExpression" value="0 40 10 * * ?" />
 	</bean>
-	<bean id="snTrigger"
+	<bean id="Trigger02"
 		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-		<property name="jobDetail" ref="SnJob" />
+		<property name="jobDetail" ref="quartz02" />
 		<!-- cron表达式 -->
 		<property name="cronExpression" value="0 40 10 * * ?" />
 	</bean>
 
 	<!-- 总管理类如果将lazy-init='false'那么容器启动就会执行调度程序 作业调度器 SchedulerFactoryBean 管理和配置触发器 -->
-	<bean id="startQuertz"
+<!-- 	<bean id="startQuertz"
 		class="org.springframework.scheduling.quartz.SchedulerFactoryBean"
 		lazy-init="false">
 		<property name="triggers">
 			<list>
-				<!--作业调度器,list下可加入其他的调度器 -->
-				<ref bean="swTrigger" />
-				<ref bean="snTrigger" />
+				作业调度器,list下可加入其他的调度器
+				<ref bean="Trigger01" />
+				<ref bean="Trigger02" />
 			</list>
 		</property>
-	</bean>
+	</bean> -->
 	<!-- 集成Quartz end-->
 
 </beans>

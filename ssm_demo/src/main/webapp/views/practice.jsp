@@ -25,6 +25,7 @@
 	</div>
 </form>
 <script type="text/javascript" src="<%= request.getContextPath() %>/static/jquery-3.4.0.js"></script>
+<%-- <script type="text/javascript" src="${ pageContext.request.contextPath }/static/jquery-3.4.0.js"></script> --%>
 <script type="text/javascript">
 		var $comment = $('#comment');
 		$('.bigger').click(function(){

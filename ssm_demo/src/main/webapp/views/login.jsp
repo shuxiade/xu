@@ -9,7 +9,7 @@
 </head>
 <body>
 
-	<form action="/ssm_demo/validate" method="post">
+	<form action="${ pageContext.request.contextPath }/validate" method="post">
 		用户名：<input name="username" type="text" />
 		密码：<input name="password" type="password"/>
 		<input type="submit" value="提交"/>${error}

@@ -5,16 +5,12 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import com.github.pagehelper.Page;
 
 @Controller
 public class LoginController {
@@ -35,6 +31,8 @@ public class LoginController {
 			subject.login(token);
 		}catch (UnknownAccountException e) {
 			error = "用户名/密码错误";
+		}catch (Exception e) {
+			error = "密码错误";
 		}
 		if(error=="") {
 			return "index";
