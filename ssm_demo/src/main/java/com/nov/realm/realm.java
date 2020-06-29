@@ -24,28 +24,27 @@ import com.nov.service.IMenuService;
 import com.nov.service.IRoleService;
 import com.nov.service.IUserService;
 
-public class realm extends AuthorizingRealm{
+public class realm extends AuthorizingRealm {
 
-	
 	@Autowired
 	private IRoleService roleService;
-	
+
 	@Autowired
 	private IUserService userService;
-	
+
 	@Autowired
 	private IMenuService menuService;
-	
+
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 		SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
-		String username = (String)principals.getPrimaryPrincipal();
+		String username = (String) principals.getPrimaryPrincipal();
 		User user = userService.findByUsername(username);
 		List<Role> roles = roleService.getRole(user.getUserId());
-		for(Role role : roles) {
+		for (Role role : roles) {
 			List<Menu> menus = menuService.getMenu(role.getRoleId());
 			simpleAuthorizationInfo.addRole(role.getRoleName());
-			for(Menu menu : menus) {
+			for (Menu menu : menus) {
 				simpleAuthorizationInfo.addStringPermission(menu.getPerms());
 			}
 		}
@@ -54,14 +53,14 @@ public class realm extends AuthorizingRealm{
 
 	@Override
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authToken) throws AuthenticationException {
-		UsernamePasswordToken token = (UsernamePasswordToken)authToken;
-		String username = (String)token.getPrincipal();
+		UsernamePasswordToken token = (UsernamePasswordToken) authToken;
+		String username = (String) token.getPrincipal();
 		User user = userService.findByUsername(username);
-		if(user==null){
+		if (user == null) {
 			throw new UnknownAccountException("用户名/密码错误");
 		}
-		SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(
-				username,user.getPassword(),ByteSource.Util.bytes(user.getSalt()),getName());
+		SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(username, user.getPassword(),
+				ByteSource.Util.bytes(user.getSalt()), getName());
 		Session session = SecurityUtils.getSubject().getSession();
 		session.setAttribute("user", user);
 		return simpleAuthenticationInfo;
@@ -70,5 +69,5 @@ public class realm extends AuthorizingRealm{
 	public void clearCacheAuthorizationInfo() {
 		this.clearCachedAuthorizationInfo(SecurityUtils.getSubject().getPrincipals());
 	}
-	
+
 }

@@ -19,34 +19,31 @@ public class LoginController {
 	public String login() {
 		return "login";
 	}
-	
-	@RequestMapping(value="/validate",method=RequestMethod.POST)
-	public String validate(@RequestParam String username,
-							@RequestParam String password,
-							HttpServletRequest request) {
-		UsernamePasswordToken token = new UsernamePasswordToken(username,password);
-		Subject subject =SecurityUtils.getSubject();
+
+	@RequestMapping(value = "/validate", method = RequestMethod.POST)
+	public String validate(@RequestParam String username, @RequestParam String password, HttpServletRequest request) {
+		UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+		Subject subject = SecurityUtils.getSubject();
 		String error = "";
 		try {
 			subject.login(token);
-		}catch (UnknownAccountException e) {
+		} catch (UnknownAccountException e) {
 			error = "用户名/密码错误";
-		}catch (Exception e) {
+		} catch (Exception e) {
 			error = "密码错误";
 		}
-		if(error=="") {
+		if (error == "") {
 			return "index";
-		}else {
+		} else {
 			request.setAttribute("error", error);
 			return "login";
 		}
-		
+
 	}
-	
-	@RequestMapping(value="unauthorized")
+
+	@RequestMapping(value = "unauthorized")
 	public String unauthorized() {
 		return "unauthorized";
 	}
-	
-	
+
 }

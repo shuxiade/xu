@@ -11,33 +11,33 @@ import com.nov.service.impl.RoleService;
 @Controller
 @RequestMapping("/role")
 public class RoleController {
-	
+
 	Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired
 	private RoleService roleService;
-	
+
 	@RequestMapping("select")
-	public String select(){
+	public String select() {
 		return "";
 	}
-	
+
 	@RequestMapping("update/{roleId}")
 	public String update() {
-		return "";                                                                    
-	}                                                                                 
-	                                                                                  
-	@RequestMapping("toUpdate/{roleId}")                                              
-	public String toUpdate() {                                                        
-		return "";                                                                    
-	}                                                                                 
-	                                                                                  
-	@RequestMapping("add")                                                            
-	public String add() {                                                             
-		return "";                                                                    
-	}                                                                                 
-	                                                                                  
-	@RequestMapping("delete/{roleId}")                                                
+		return "";
+	}
+
+	@RequestMapping("toUpdate/{roleId}")
+	public String toUpdate() {
+		return "";
+	}
+
+	@RequestMapping("add")
+	public String add() {
+		return "";
+	}
+
+	@RequestMapping("delete/{roleId}")
 	public void delete() {
-		
+
 	}
 }

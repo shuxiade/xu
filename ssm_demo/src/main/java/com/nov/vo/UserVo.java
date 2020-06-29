@@ -13,5 +13,5 @@ public class UserVo {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
+
 }

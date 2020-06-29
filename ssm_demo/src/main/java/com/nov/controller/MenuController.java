@@ -12,30 +12,30 @@ public class MenuController {
 
 	@Autowired
 	private MenuService menuService;
-	
+
 	@RequestMapping("select")
 	public String select() {
 		return "";
 	}
-	
+
 	@RequestMapping("update/{menuId}")
 	public String update() {
 		return "";
 	}
-	
+
 	@RequestMapping("toUpdate/{menuId}")
 	public String toUpdate() {
 		return "";
 	}
-	
+
 	@RequestMapping("add")
 	public String add() {
 		return "";
 	}
-	
+
 	@RequestMapping("delete/{menuId}")
 	public String delete() {
 		return "";
 	}
-	
+
 }
