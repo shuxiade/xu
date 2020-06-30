@@ -7,10 +7,7 @@
 		<!-- 开启驼峰命名 -->
 		<setting name="mapUnderscoreToCamelCase" value="true" />
 	</settings>
-	
-	<!-- <plugins>
-		<plugin interceptor="com.github.pagehelper.PageHelper">
-			<property name="" value=""/>
-		</plugin>	
-	</plugins> -->
+
+	<!-- <plugins> <plugin interceptor="com.github.pagehelper.PageHelper"> <property 
+		name="" value=""/> </plugin> </plugins> -->
 </configuration>

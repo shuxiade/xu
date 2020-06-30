@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class LoginController {
 
-	@GetMapping("/login")
+	@GetMapping({"/login","/"})
 	public String login() {
 		return "login";
 	}
@@ -36,9 +36,8 @@ public class LoginController {
 			return "index";
 		} else {
 			request.setAttribute("error", error);
-			return "login";
+			return "redirect:/login";
 		}
-
 	}
 
 	@RequestMapping(value = "unauthorized")

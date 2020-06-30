@@ -3,15 +3,17 @@
 <mapper namespace="com.nov.dao.RoleDao">
 	<resultMap type="com.nov.entity.Role" id="Role">
 		<id column="role_id" property="roleId"></id>
-		<result column="role_name" property="roleName"/>
-		<result column="remark" property="remark"/>
-		<result column="delete_flag" property="deleteFlag"/>
-		<result column="create_by" property="createBy"/>
-		<result column="create_time" property="createTime"/>
-		<result column="update_by" property="updateBy"/>
-		<result column="update_time" property="udpateTime"/>
+		<result column="role_name" property="roleName" />
+		<result column="remark" property="remark" />
+		<result column="delete_flag" property="deleteFlag" />
+		<result column="create_by" property="createBy" />
+		<result column="create_time" property="createTime" />
+		<result column="update_by" property="updateBy" />
+		<result column="update_time" property="udpateTime" />
 	</resultMap>
 	<select id="getRole" resultMap="Role">
-		SELECT * FROM sys_user_role a LEFT JOIN sys_role b ON a.role_id = b.role_id WHERE user_id = #{userId};
+		SELECT * FROM sys_user_role a
+		LEFT JOIN sys_role b ON a.role_id = b.role_id WHERE user_id =
+		#{userId};
 	</select>
 </mapper>

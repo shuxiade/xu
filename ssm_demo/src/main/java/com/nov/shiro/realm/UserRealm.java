@@ -1,4 +1,4 @@
-package com.nov.realm;
+package com.nov.shiro.realm;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ import com.nov.service.IMenuService;
 import com.nov.service.IRoleService;
 import com.nov.service.IUserService;
 
-public class realm extends AuthorizingRealm {
+public class UserRealm extends AuthorizingRealm {
 
 	@Autowired
 	private IRoleService roleService;
@@ -59,7 +59,7 @@ public class realm extends AuthorizingRealm {
 		if (user == null) {
 			throw new UnknownAccountException("用户名/密码错误");
 		}
-		SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(username, user.getPassword(),
+		SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(user.getUsername(), user.getPassword(),
 				ByteSource.Util.bytes(user.getSalt()), getName());
 		Session session = SecurityUtils.getSubject().getSession();
 		session.setAttribute("user", user);
@@ -70,4 +70,12 @@ public class realm extends AuthorizingRealm {
 		this.clearCachedAuthorizationInfo(SecurityUtils.getSubject().getPrincipals());
 	}
 
+	/**
+	 * 重写Realm命名
+	 * 默认的Realm命名规则{@link org.apache.shiro.realm.CachingRealm#CachingRealm()}
+	 */
+	@Override
+	public String getName() {
+        return getClass().getName();
+    }
 }

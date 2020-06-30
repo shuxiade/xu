@@ -22,6 +22,10 @@ public class PasswordHelper {
 		user.randomSalt();
 		encryptPassword(user);
 		System.out.println(user.getPassword());
+		System.out.println(user.getSalt());
 		System.out.println(ByteSource.Util.bytes(user.getSalt()));
+//		ed0d8366a37b956d590b1f6a6d28ff3b
+//		9d01bc6b32dc
+//		OWQwMWJjNmIzMmRj
 	}
 }

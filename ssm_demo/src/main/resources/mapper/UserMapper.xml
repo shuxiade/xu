@@ -31,8 +31,19 @@
 	<select id="findAll" resultMap="User">
 		SELECT * FROM sys_user
 	</select>
-	
+
 	<select id="findByUsername" resultMap="User">
-		SELECT * FROM sys_user WHERE username=#{username}
+		SELECT * FROM sys_user
+		WHERE username=#{username}
+	</select>
+
+	<select id="findByPhone" resultMap="User">
+		SELECT * FROM sys_user WHERE
+		phonenumber=#{phone}
+	</select>
+
+	<select id="findByEmail" resultMap="User">
+		SELECT * FROM sys_user WHERE
+		email=#{email}
 	</select>
 </mapper>

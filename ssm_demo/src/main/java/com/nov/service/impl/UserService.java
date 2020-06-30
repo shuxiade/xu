@@ -29,4 +29,14 @@ public class UserService implements IUserService {
 		return userDao.findByUsername(username);
 	}
 	
+	@Override
+	public User findByPhone(String phone) {
+		return userDao.findByPhone(phone);
+	}
+	
+	@Override
+	public User findByEmail(String email) {
+		return userDao.findByEmail(email);
+	}
+	
 }

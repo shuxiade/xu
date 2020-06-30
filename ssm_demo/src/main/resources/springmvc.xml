@@ -6,14 +6,16 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
-	
-	<mvc:annotation-driven/>
-	<mvc:default-servlet-handler/>
-		
-	<context:component-scan base-package="com.nov.controller"></context:component-scan>
-	<bean id="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+
+	<mvc:annotation-driven />
+	<mvc:default-servlet-handler />
+
+	<context:component-scan
+		base-package="com.nov.controller"></context:component-scan>
+	<bean id="jspViewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="/views/"></property>
 		<property name="suffix" value=".jsp"></property>
 	</bean>
-	
+
 </beans>

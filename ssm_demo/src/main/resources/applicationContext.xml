@@ -69,14 +69,62 @@
 		<property name="cookie" ref="rememberMeCookie"></property> </bean> -->
 
 	<!-- realm数据源 -->
-	<bean id="realm" class="com.nov.realm.realm">
+	<bean id="userRealm" class="com.nov.shiro.realm.UserRealm">
 		<property name="credentialsMatcher"
 			ref="hashedCredentialsMatcher"></property>
 	</bean>
+	<bean id="phoneRealm" class="com.nov.shiro.realm.PhoneRealm">
+		<property name="credentialsMatcher"
+			ref="hashedCredentialsMatcher"></property>
+	</bean>
+	<bean id="mailRealm" class="com.nov.shiro.realm.MailRealm">
+		<property name="credentialsMatcher"
+			ref="hashedCredentialsMatcher"></property>
+	</bean>
+	
+	<!-- shiro默认为多Realm验证 -->
+	<!-- Realm身份验证策略 -->
+<!-- 	<bean id="successfulStrategy" class="org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy"></bean> -->
+	<!-- Realm身份验证器 -->
+<!-- 	<bean id="authenticator" class="org.apache.shiro.authc.pam.ModularRealmAuthenticator"> -->
+<!-- 		<property name= "authenticationStrategy" ref="successfulStrategy"></property> -->
+<!-- 	</bean> -->
+	
+	<!-- 重写多realm身份认证器  -->
+	<bean id="authenticator" class="com.nov.shiro.custom.CustomModularRealmAuthenticator">
+		<property name="realms">
+			<list>
+				<ref bean="userRealm"/>
+				<ref bean="phoneRealm"/>
+				<ref bean="mailRealm"/>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 重写realm权限认证器 -->
+	<bean id="authorizer" class="org.apache.shiro.authz.ModularRealmAuthorizer">
+<!-- 		<property name="realms"> -->
+<!-- 			<list> -->
+<!-- 				<ref bean="userRealm"/> -->
+<!-- 				<ref bean="phoneRealm"/> -->
+<!-- 				<ref bean="mailRealm"/> -->
+<!-- 			</list> -->
+<!-- 		</property> -->
+	</bean>
+	
 	<!-- 安全管理器 -->
 	<bean id="securityManager"
 		class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
-		<property name="realms" ref="realm"></property>
+		<!-- 加载自定义realm身份认证器，在自定义认证器中加载realm -->
+<!-- 	<property name="realms"> -->
+<!-- 		<list> -->
+<!-- 			<ref bean="userRealm" /> -->
+<!-- 			<ref bean="phoneRealm" /> -->
+<!-- 			<ref bean="mailRealm" /> -->
+<!-- 		</list> -->
+<!-- 	</property> -->
+		<property name="authenticator" ref="authenticator"></property>
+		<property name="authorizer" ref="authorizer"></property>
 		<!-- <property name="rememberMeManager" ref="rememberMeManager"></property> -->
 	</bean>
 
@@ -95,7 +143,6 @@
 				/login=anon
 				/validate=anon
 				/**=authc
-
 			</value>
 		</property>
 		<!-- <property name="filters"> <map> <entry key="perms" value=""></entry> 
