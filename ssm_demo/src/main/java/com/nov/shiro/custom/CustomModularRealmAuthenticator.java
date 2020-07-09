@@ -18,5 +18,4 @@ public class CustomModularRealmAuthenticator extends ModularRealmAuthenticator {
 
 		return super.doMultiRealmAuthentication(realms, token);
 	}
-
 }
