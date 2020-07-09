@@ -45,7 +45,7 @@ public class UserRealm extends AuthorizingRealm {
 			List<Menu> menus = menuService.getMenu(role.getRoleId());
 			simpleAuthorizationInfo.addRole(role.getRoleName());
 			for (Menu menu : menus) {
-				simpleAuthorizationInfo.addStringPermission(menu.getPerms());
+				simpleAuthorizationInfo.addStringPermission(menu.getUrl());
 			}
 		}
 		return simpleAuthorizationInfo;

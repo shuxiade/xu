@@ -81,60 +81,69 @@
 		<property name="credentialsMatcher"
 			ref="hashedCredentialsMatcher"></property>
 	</bean>
-	
+
 	<!-- shiro默认为多Realm验证 -->
 	<!-- Realm身份验证策略 -->
-<!-- 	<bean id="successfulStrategy" class="org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy"></bean> -->
+	<!-- <bean id="successfulStrategy" class="org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy"></bean> -->
 	<!-- Realm身份验证器 -->
-<!-- 	<bean id="authenticator" class="org.apache.shiro.authc.pam.ModularRealmAuthenticator"> -->
-<!-- 		<property name= "authenticationStrategy" ref="successfulStrategy"></property> -->
-<!-- 	</bean> -->
-	
-	<!-- 重写多realm身份认证器  -->
-	<bean id="authenticator" class="com.nov.shiro.custom.CustomModularRealmAuthenticator">
+	<!-- <bean id="authenticator" class="org.apache.shiro.authc.pam.ModularRealmAuthenticator"> -->
+	<!-- <property name= "authenticationStrategy" ref="successfulStrategy"></property> -->
+	<!-- </bean> -->
+
+	<!-- 重写多realm身份认证器 -->
+	<bean id="authenticator"
+		class="com.nov.shiro.custom.CustomModularRealmAuthenticator">
 		<property name="realms">
 			<list>
-				<ref bean="userRealm"/>
-				<ref bean="phoneRealm"/>
-				<ref bean="mailRealm"/>
+				<ref bean="userRealm" />
+				<ref bean="phoneRealm" />
+				<ref bean="mailRealm" />
 			</list>
 		</property>
 	</bean>
-	
+
 	<!-- 重写realm权限认证器 -->
-	<bean id="authorizer" class="org.apache.shiro.authz.ModularRealmAuthorizer">
-<!-- 		<property name="realms"> -->
-<!-- 			<list> -->
-<!-- 				<ref bean="userRealm"/> -->
-<!-- 				<ref bean="phoneRealm"/> -->
-<!-- 				<ref bean="mailRealm"/> -->
-<!-- 			</list> -->
-<!-- 		</property> -->
+	<bean id="authorizer"
+		class="org.apache.shiro.authz.ModularRealmAuthorizer">
+		<!-- <property name="realms"> -->
+		<!-- <list> -->
+		<!-- <ref bean="userRealm"/> -->
+		<!-- <ref bean="phoneRealm"/> -->
+		<!-- <ref bean="mailRealm"/> -->
+		<!-- </list> -->
+		<!-- </property> -->
 	</bean>
-	
+
 	<!-- 安全管理器 -->
 	<bean id="securityManager"
 		class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
 		<!-- 加载自定义realm身份认证器，在自定义认证器中加载realm -->
-<!-- 	<property name="realms"> -->
-<!-- 		<list> -->
-<!-- 			<ref bean="userRealm" /> -->
-<!-- 			<ref bean="phoneRealm" /> -->
-<!-- 			<ref bean="mailRealm" /> -->
-<!-- 		</list> -->
-<!-- 	</property> -->
+		<!-- <property name="realms"> -->
+		<!-- <list> -->
+		<!-- <ref bean="userRealm" /> -->
+		<!-- <ref bean="phoneRealm" /> -->
+		<!-- <ref bean="mailRealm" /> -->
+		<!-- </list> -->
+		<!-- </property> -->
 		<property name="authenticator" ref="authenticator"></property>
 		<property name="authorizer" ref="authorizer"></property>
 		<!-- <property name="rememberMeManager" ref="rememberMeManager"></property> -->
 	</bean>
 
+	<!-- 重写过滤器处理器，执行全部过滤器 -->
+<!-- 	<bean id="customFilterChainManager" class="com.nov.shiro.custom.CustomFilterChainManager"></bean> -->
+<!-- 	<bean id="customFilterChainResolver" class="com.nov.shiro.custom.CustomPathMatchingFilterChainResolver"> -->
+<!-- 		<property name="customFilterChainManager" ref="customFilterChainManager"></property> -->
+<!-- 	</bean> -->
+	
 	<!-- 开启shiro注解 -->
 	<bean
 		class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
 		<property name="securityManager" ref="securityManager"></property>
 	</bean>
+	<bean id="customPermissionFilter" class="com.nov.shiro.custom.CustomPermissionsAuthorizationFilter"></bean>
 	<bean id="shiroFilter"
-		class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		class="com.nov.shiro.custom.CustomShiroFilterFactoryBean">
 		<property name="securityManager" ref="securityManager"></property>
 		<property name="loginUrl" value="/login"></property>
 		<property name="unauthorizedUrl" value="/unauthorized"></property>
@@ -145,16 +154,27 @@
 				/**=authc
 			</value>
 		</property>
-		<!-- <property name="filters"> <map> <entry key="perms" value=""></entry> 
-			</map> </property> -->
+		<!-- url拦截 -->
+		<property name="filters">
+			<map>
+				<entry key="perms" value="customPermissionFilter"></entry>
+			</map>
+		</property>
 	</bean>
+	
+	<!-- 将自定义过滤器处理器，通过反射注入 -->
+<!-- 	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean"> -->
+<!-- 	    <property name="targetObject" ref="shiroFilter"/> -->
+<!-- 	    <property name="targetMethod" value="setFilterChainResolver"/> -->
+<!-- 	    <property name="arguments" ref="customFilterChainResolver"/> -->
+<!-- 	</bean> -->
 
 	<bean id="lifecycleBeanPostProcessor"
 		class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
 
-	<!-- 集成Quartz   start-->
+	<!-- 集成Quartz start -->
 	<bean id="jobBean" class="com.nov.controller.QuartzController" />
-	
+
 	<bean id="quartz01"
 		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject" ref="jobBean" />
@@ -166,7 +186,7 @@
 		<property name="targetObject" ref="jobBean" />
 		<property name="targetMethod" value="quartz02" />
 	</bean>
-	
+
 	<bean id="Trigger01"
 		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="quartz01" />
@@ -181,17 +201,9 @@
 	</bean>
 
 	<!-- 总管理类如果将lazy-init='false'那么容器启动就会执行调度程序 作业调度器 SchedulerFactoryBean 管理和配置触发器 -->
-<!-- 	<bean id="startQuertz"
-		class="org.springframework.scheduling.quartz.SchedulerFactoryBean"
-		lazy-init="false">
-		<property name="triggers">
-			<list>
-				作业调度器,list下可加入其他的调度器
-				<ref bean="Trigger01" />
-				<ref bean="Trigger02" />
-			</list>
-		</property>
-	</bean> -->
-	<!-- 集成Quartz end-->
+	<!-- <bean id="startQuertz" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" 
+		lazy-init="false"> <property name="triggers"> <list> 作业调度器,list下可加入其他的调度器 
+		<ref bean="Trigger01" /> <ref bean="Trigger02" /> </list> </property> </bean> -->
+	<!-- 集成Quartz end -->
 
 </beans>
