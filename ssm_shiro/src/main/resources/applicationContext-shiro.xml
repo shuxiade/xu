@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+
+
+	<!-- 缓存管理器 -->
+	<!-- <bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager"> 
+		<property name="cacheManagerConfigFile" value="classpath:shiroCache.xml"></property> 
+		</bean> -->
+
+	<!-- 密码凭证器 -->
+	<bean id="hashedCredentialsMatcher"
+		class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+		<property name="hashAlgorithmName" value="MD5"></property>
+		<property name="hashIterations" value="2"></property>
+	</bean>
+
+	<!-- RememberMe -->
+	<!-- <bean id="sessionIdCookie" class="org.apache.shiro.web.servlet.SimpleCookie"> 
+		<constructor-arg value="sid"></constructor-arg> <property name="httpOnly" 
+		value="true"></property> <property name="maxAge" value="-1"></property> </bean> 
+		<bean id="rememberMeCookie" class="org.apache.shiro.web.servlet.SimpleCookie"> 
+		<constructor-arg value="rememberMe"></constructor-arg> <property name="httpOnly" 
+		value="true"></property> <property name="maxAge" value="2592000"></property>一个月 
+		</bean> <bean id="rememberMeManager" class="org.apache.shiro.web.mgt.CookieRememberMeManager"> 
+		<property name="cipherKey" value="#{Base64.decode('2AvVhdsgUs0FSA3SDFAdag==')}"></property> 
+		<property name="cookie" ref="rememberMeCookie"></property> </bean> -->
+
+	<!-- realm数据源 -->
+	<bean id="userRealm" class="com.nov.shiro.realm.UserRealm">
+		<property name="credentialsMatcher"
+			ref="hashedCredentialsMatcher"></property>
+	</bean>
+	<bean id="phoneRealm" class="com.nov.shiro.realm.PhoneRealm">
+		<property name="credentialsMatcher"
+			ref="hashedCredentialsMatcher"></property>
+	</bean>
+	<bean id="mailRealm" class="com.nov.shiro.realm.MailRealm">
+		<property name="credentialsMatcher"
+			ref="hashedCredentialsMatcher"></property>
+	</bean>
+
+	<!-- shiro默认为多Realm验证 -->
+	<!-- Realm身份验证策略 -->
+	<!-- <bean id="successfulStrategy" class="org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy"></bean> -->
+	<!-- Realm身份验证器 -->
+	<!-- <bean id="authenticator" class="org.apache.shiro.authc.pam.ModularRealmAuthenticator"> -->
+	<!-- <property name= "authenticationStrategy" ref="successfulStrategy"></property> -->
+	<!-- </bean> -->
+
+	<!-- 重写多realm身份认证器 -->
+	<bean id="authenticator"
+		class="com.nov.shiro.custom.CustomModularRealmAuthenticator">
+		<property name="realms">
+			<list>
+				<ref bean="userRealm" />
+				<ref bean="phoneRealm" />
+				<ref bean="mailRealm" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- 重写realm权限认证器 -->
+	<bean id="authorizer"
+		class="org.apache.shiro.authz.ModularRealmAuthorizer">
+		<property name="realms">
+			<list>
+				<ref bean="userRealm" />
+				<ref bean="phoneRealm" />
+				<ref bean="mailRealm" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- 安全管理器 -->
+	<bean id="securityManager"
+		class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<!-- 加载自定义realm身份认证器，在自定义认证器中加载realm -->
+		<property name="realms">
+			<list>
+				<ref bean="userRealm" />
+				<ref bean="phoneRealm" />
+				<ref bean="mailRealm" />
+			</list>
+		</property>
+		<property name="authenticator" ref="authenticator"></property>
+		<property name="authorizer" ref="authorizer"></property>
+		<!-- <property name="rememberMeManager" ref="rememberMeManager"></property> -->
+	</bean>
+
+	<!-- 重写过滤器处理器，执行全部过滤器 -->
+	<bean id="customFilterChainManager"
+		class="com.nov.shiro.custom.CustomFilterChainManager"></bean>
+	<bean id="customFilterChainResolver"
+		class="com.nov.shiro.custom.CustomPathMatchingFilterChainResolver">
+		<property name="customFilterChainManager"
+			ref="customFilterChainManager"></property>
+	</bean>
+
+	<!-- 开启shiro注解 -->
+	<bean
+		class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+		<property name="securityManager" ref="securityManager"></property>
+	</bean>
+	<bean id="customPermissionFilter"
+		class="com.nov.shiro.custom.CustomPermissionsAuthorizationFilter"></bean>
+	<bean id="shiroFilter"
+		class="com.nov.shiro.custom.CustomShiroFilterFactoryBean">
+		<property name="securityManager" ref="securityManager"></property>
+		<property name="loginUrl" value="/login"></property>
+		<property name="unauthorizedUrl" value="/unauthorized"></property>
+		<property name="filterChainDefinitions">
+			<value>
+				/login=anon
+				/validate=anon
+				/**=authc
+			</value>
+		</property>
+		<!-- url拦截 -->
+<!-- 		<property name="filters"> -->
+<!-- 			<map> -->
+<!-- 				<entry key="perms" value="customPermissionFilter"></entry> -->
+<!-- 			</map> -->
+<!-- 		</property> -->
+	</bean>
+
+	<!-- 将自定义过滤器处理器，通过反射注入 -->
+<!-- 	<bean -->
+<!-- 		class="org.springframework.beans.factory.config.MethodInvokingFactoryBean"> -->
+<!-- 		<property name="targetObject" ref="shiroFilter" /> -->
+<!-- 		<property name="targetMethod" value="setFilterChainResolver" /> -->
+<!-- 		<property name="arguments" ref="customFilterChainResolver" /> -->
+<!-- 	</bean> -->
+</beans>

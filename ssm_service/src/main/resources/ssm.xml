@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 配置Tomcat -->
+<Context
+	doBase="D:\apache-tomcat-7.0.93\apache-tomcat-7.0.93\webapps\ssm_demo" />

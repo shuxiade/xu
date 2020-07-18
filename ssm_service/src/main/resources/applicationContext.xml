@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+
+
+	<!-- 代理开启注解 -->
+	<aop:config proxy-target-class="true"></aop:config>
+
+	<!-- Spring扫描器 -->
+	<context:component-scan
+		base-package="com.nov.service.impl"></context:component-scan>
+<!-- 	<context:component-scan -->
+<!-- 		base-package="com.nov.dao.intf"></context:component-scan> -->
+
+	<!-- 加载配置wenjian -->
+	<context:property-placeholder
+		location="classpath:db.properties" />
+
+	<!-- 数据源 -->
+	<bean id="dataSource"
+		class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="${jdbc.driverClass}"></property>
+		<property name="jdbcUrl" value="${jdbc.jdbcUrl}"></property>
+		<property name="user" value="${jdbc.user}"></property>
+		<property name="password" value="${jdbc.password}"></property>
+	</bean>
+
+	<!-- Mybatis扫描器，用来扫描dao接口 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.nov.dao"></property>
+	</bean>
+
+	<!-- Mybatis SqlSessionFactoryBean实例(用来调用mapper) -->
+	<bean id="sqlSessionFactory"
+		class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="configLocation"
+			value="classpath:sqlMapConfig.xml"></property>
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="mapperLocations"
+			value="classpath*:mapper/*.xml"></property>
+	</bean>
+
+	
+
+	<bean id="lifecycleBeanPostProcessor"
+		class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
+
+	<!-- 集成Quartz start -->
+	<bean id="jobBean" class="com.nov.controller.QuartzController" />
+
+	<bean id="quartz01"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="jobBean" />
+		<property name="targetMethod" value="quartz01" />
+	</bean>
+
+	<bean id="quartz02"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="jobBean" />
+		<property name="targetMethod" value="quartz02" />
+	</bean>
+
+	<bean id="Trigger01"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="quartz01" />
+		<!-- cron表达式 -->
+		<property name="cronExpression" value="0 40 10 * * ?" />
+	</bean>
+	<bean id="Trigger02"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="quartz02" />
+		<!-- cron表达式 -->
+		<property name="cronExpression" value="0 40 10 * * ?" />
+	</bean>
+
+	<!-- 总管理类如果将lazy-init='false'那么容器启动就会执行调度程序 作业调度器 SchedulerFactoryBean 管理和配置触发器 -->
+	<!-- <bean id="startQuertz" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" 
+		lazy-init="false"> <property name="triggers"> <list> 作业调度器,list下可加入其他的调度器 
+		<ref bean="Trigger01" /> <ref bean="Trigger02" /> </list> </property> </bean> -->
+	<!-- 集成Quartz end -->
+
+</beans>
